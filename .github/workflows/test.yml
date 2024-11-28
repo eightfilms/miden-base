@@ -9,9 +9,9 @@ concurrency:
 
 on:
   push:
-    branches: [main, next]
+    branches: [main, next, kernel-build-once]
   pull_request:
-    types: [opened, reopened, synchronize] 
+    types: [opened, reopened, synchronize]
 
 jobs:
   test:
@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
-      - uses: taiki-e/install-action@nextest 
+      - uses: taiki-e/install-action@nextest
       - uses: Swatinem/rust-cache@v2
         with:
           save-if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/next' }}
       - name: Install rust
-        run: rustup update --no-self-update 
+        run: rustup update --no-self-update
       - name: Build tests
         run: make test-build
       - name: test-default
