@@ -42,7 +42,6 @@ const KERNEL_ERRORS_FILE: &str = "src/errors/tx_kernel_errors.rs";
 fn main() -> Result<()> {
     // re-build when the MASM code changes
     println!("cargo:rerun-if-changed={ASM_DIR}");
-    println!("cargo:rerun-if-changed={KERNEL_V0_RS_FILE}");
     println!("cargo:rerun-if-changed={KERNEL_ERRORS_FILE}");
     println!("cargo::rerun-if-env-changed=BUILD_KERNEL_ERRORS");
 
@@ -141,9 +140,7 @@ fn compile_tx_kernel(source_dir: &Path, target_dir: &Path) -> Result<Assembler> 
     )?;
 
     // generate `kernel_v0.rs` file
-    if !Path::new(KERNEL_V0_RS_FILE).exists() {
-        generate_kernel_proc_hash_file(kernel_lib.clone())?;
-    }
+    generate_kernel_proc_hash_file(kernel_lib.clone())?;
 
     let output_file = target_dir.join("tx_kernel").with_extension(Library::LIBRARY_EXTENSION);
     kernel_lib.write_to_file(output_file).into_diagnostic()?;
